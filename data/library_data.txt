@@ -1,0 +1,58 @@
+BOOK
+Title: Преступление и наказание
+Author: Фёдор Достоевский
+Year: 1866
+ISBN: 978-5-389-07477-5
+Available: yes
+BorrowedBy: 
+
+BOOK
+Title: Мастер и Маргарита
+Author: Михаил Булгаков
+Year: 1967
+ISBN: 978-5-389-07455-3
+Available: no
+BorrowedBy: Петров
+
+BOOK
+Title: Отцы и дети
+Author: Иван Тургенев
+Year: 1862
+ISBN: 978-5-389-04533-1
+Available: yes
+BorrowedBy: 
+
+BOOK
+Title: Гарри Поттер и Тайная комната
+Author: Дж. К. Роулинг
+Year: 1998
+ISBN: 978-5-17-70490-8345
+Available: yes
+BorrowedBy: 
+
+---USERS---
+
+USER
+Name: Иванов
+UserID: USR_001
+BorrowedBooks: 
+MaxBooks: 3
+
+USER
+Name: Петров
+UserID: USR_002
+BorrowedBooks: 978-5-389-07455-3
+MaxBooks: 2
+
+USER
+Name: Сидорова
+UserID: USR_003
+BorrowedBooks: 
+MaxBooks: 4
+
+USER
+Name: Попов
+UserID: USR_228
+BorrowedBooks: 
+MaxBooks: 3
+
