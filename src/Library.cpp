@@ -2,15 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <algorithm>
 
 Library::Library(const std::string& dataFile) : dataFile(dataFile) {
     loadFromFile();
 }
 
 void Library::addBook(const Book& book) {
-    for (const auto& b : books) {
-        if (b.getISBN() == book.getISBN()) {
+    for (int i = 0; i < books.size(); i++) {
+        if (books[i].getISBN() == book.getISBN()) {
             throw std::runtime_error("ISBN существует");
         }
     }
@@ -47,15 +46,19 @@ void Library::returnBook(const std::string& isbn) {
 }
 
 Book* Library::findBookByISBN(const std::string& isbn) {
-    for (auto& book : books) {
-        if (book.getISBN() == isbn) return &book;
+    for (int i = 0; i < books.size(); i++) {
+        if (books[i].getISBN() == isbn) {
+            return &books[i];
+        }
     }
     return nullptr;
 }
 
 User* Library::findUserByName(const std::string& name) {
-    for (auto& user : users) {
-        if (user.getName() == name) return &user;
+    for (int i = 0; i < users.size(); i++) {
+        if (users[i].getName() == name) {
+            return &users[i];
+        }
     }
     return nullptr;
 }
@@ -67,7 +70,7 @@ void Library::displayAllBooks() const {
     }
     
     std::cout << "\n=== КАТАЛОГ КНИГ ===" << std::endl;
-    for (size_t i = 0; i < books.size(); ++i) {
+    for (int i = 0; i < books.size(); i++) {
         std::cout << "\nКнига #" << (i + 1) << ":" << std::endl;
         books[i].displayInfo();
     }
@@ -80,7 +83,7 @@ void Library::displayAllUsers() const {
     }
     
     std::cout << "\n=== СПИСОК ПОЛЬЗОВАТЕЛЕЙ ===" << std::endl;
-    for (size_t i = 0; i < users.size(); ++i) {
+    for (int i = 0; i < users.size(); i++) {
         std::cout << "\nПользователь #" << (i + 1) << ":" << std::endl;
         users[i].displayProfile();
     }
@@ -90,31 +93,31 @@ void Library::saveToFile() {
     std::ofstream file(dataFile);
     if (!file.is_open()) throw std::runtime_error("Ошибка записи");
     
-    for (const auto& book : books) {
+    for (int i = 0; i < books.size(); i++) {
         file << "BOOK\n";
-        file << "Title: " << book.getTitle() << "\n";
-        file << "Author: " << book.getAuthor() << "\n";
-        file << "Year: " << book.getYear() << "\n";
-        file << "ISBN: " << book.getISBN() << "\n";
-        file << "Available: " << (book.getIsAvailable() ? "yes" : "no") << "\n";
-        file << "BorrowedBy: " << book.getBorrowedBy() << "\n\n";
+        file << "Title: " << books[i].getTitle() << "\n";
+        file << "Author: " << books[i].getAuthor() << "\n";
+        file << "Year: " << books[i].getYear() << "\n";
+        file << "ISBN: " << books[i].getISBN() << "\n";
+        file << "Available: " << (books[i].getIsAvailable() ? "yes" : "no") << "\n";
+        file << "BorrowedBy: " << books[i].getBorrowedBy() << "\n\n";
     }
     
     file << "---USERS---\n\n";
     
-    for (const auto& user : users) {
+    for (int i = 0; i < users.size(); i++) {
         file << "USER\n";
-        file << "Name: " << user.getName() << "\n";
-        file << "UserID: " << user.getUserId() << "\n";
+        file << "Name: " << users[i].getName() << "\n";
+        file << "UserID: " << users[i].getUserId() << "\n";
         file << "BorrowedBooks: ";
         
-        auto borrowedBooks = user.getBorrowedBooks();
-        for (size_t i = 0; i < borrowedBooks.size(); ++i) {
-            file << borrowedBooks[i];
-            if (i < borrowedBooks.size() - 1) file << "|";
+        std::vector<std::string> borrowedBooks = users[i].getBorrowedBooks();
+        for (int j = 0; j < borrowedBooks.size(); j++) {
+            file << borrowedBooks[j];
+            if (j < borrowedBooks.size() - 1) file << "|";
         }
         file << "\n";
-        file << "MaxBooks: " << user.getMaxBooksAllowed() << "\n\n";
+        file << "MaxBooks: " << users[i].getMaxBooksAllowed() << "\n\n";
     }
     file.close();
 }
@@ -143,12 +146,8 @@ void Library::loadFromFile() {
             while (std::getline(file, line)) {
                 if (!line.empty() && line.back() == '\r') line.pop_back();
                 if (line.empty()) break;
-                if (line == "BOOK" || line == "---USERS---") {
-                    file.seekg(-(long long)line.length() - 2, std::ios::cur);
-                    break;
-                }
                 
-                size_t pos = line.find(": ");
+                int pos = line.find(": ");
                 if (pos != std::string::npos) {
                     std::string key = line.substr(0, pos);
                     std::string value = line.substr(pos + 2);
@@ -178,12 +177,8 @@ void Library::loadFromFile() {
             while (std::getline(file, line)) {
                 if (!line.empty() && line.back() == '\r') line.pop_back();
                 if (line.empty()) break;
-                if (line == "USER") {
-                    file.seekg(-(long long)line.length() - 2, std::ios::cur);
-                    break;
-                }
                 
-                size_t pos = line.find(": ");
+                int pos = line.find(": ");
                 if (pos != std::string::npos) {
                     std::string key = line.substr(0, pos);
                     std::string value = line.substr(pos + 2);
