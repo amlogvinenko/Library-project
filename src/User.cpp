@@ -30,7 +30,7 @@ void User::addBook(const std::string& isbn) {
 }
 
 void User::removeBook(const std::string& isbn) {
-    for (int i = 0; i < borrowedBooks.size(); i++) {
+    for (int i = 0; i < (int)borrowedBooks.size(); i++) {
         if (borrowedBooks[i] == isbn) {
             borrowedBooks.erase(borrowedBooks.begin() + i);
             break;
@@ -44,9 +44,9 @@ void User::displayProfile() const {
     std::cout << "Взятых книг: " << borrowedBooks.size() << "/" << maxBooksAllowed << std::endl;
     if (!borrowedBooks.empty()) {
         std::cout << "ISBN взятых книг: ";
-        for (int i = 0; i < borrowedBooks.size(); i++) {
+        for (int i = 0; i < (int)borrowedBooks.size(); i++) {
             std::cout << borrowedBooks[i];
-            if (i < borrowedBooks.size() - 1) {
+            if (i < (int)borrowedBooks.size() - 1) {
                 std::cout << ", ";
             }
         }
